@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}techkev-Appstore{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="/">techkev-Appstore</a>
+        <nav class="topnav">
+            <a href="/">Übersicht</a>
+            <a href="/upload" class="btn btn-primary">+ APK hochladen</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Übersicht – techkev-Appstore{% endblock %}
+{% block content %}
+<h1>Apps</h1>
+
+{% if not apps %}
+<p class="muted">Noch keine Apps hochgeladen. <a href="/upload">Jetzt die erste APK hochladen</a>.</p>
+{% else %}
+<div class="app-grid">
+    {% for app in apps %}
+    {% set latest = app.latest_version %}
+    <a class="app-card" href="/apps/{{ app.id }}">
+        {% if app.icon_filename %}
+        <img class="app-icon" src="/data/icons/{{ app.icon_filename }}" alt="{{ app.display_name }}">
+        {% else %}
+        <div class="app-icon app-icon-placeholder">{{ app.display_name[0]|upper }}</div>
+        {% endif %}
+        <div class="app-card-body">
+            <h2>{{ app.display_name }}</h2>
+            <p class="muted">{{ app.package_name }}</p>
+            <div class="badges">
+                <span class="badge">{{ app.category }}</span>
+                {% if latest %}
+                <span class="badge badge-outline">v{{ latest.version_name }} ({{ latest.version_code }})</span>
+                {% endif %}
+            </div>
+            {% if latest %}
+            <p class="muted small">{{ "%.1f"|format(latest.apk_size_bytes / 1048576) }} MB &middot; {{ latest.download_count }} Downloads</p>
+            {% endif %}
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

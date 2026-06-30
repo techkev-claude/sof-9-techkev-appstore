@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – techkev-Appstore</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="login-body">
+    <div class="login-card">
+        <h1>techkev-Appstore</h1>
+        <p class="muted">Bitte anmelden</p>
+        {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
+        <form method="post" action="/login">
+            <input type="hidden" name="next" value="{{ next or '/' }}">
+            <label for="username">Benutzername</label>
+            <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+
+            <label for="password">Passwort</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required>
+
+            <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
+        </form>
+    </div>
+</body>
+</html>
