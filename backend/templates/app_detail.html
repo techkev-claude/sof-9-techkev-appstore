@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ app.display_name }} – techkev-Appstore{% endblock %}
+{% block content %}
+{% set latest = app.latest_version %}
+
+<a href="/" class="back-link">&larr; Zurück zur Übersicht</a>
+
+<div class="detail-header card">
+    {% if app.icon_filename %}
+    <img class="app-icon app-icon-large" src="/data/icons/{{ app.icon_filename }}" alt="{{ app.display_name }}">
+    {% else %}
+    <div class="app-icon app-icon-large app-icon-placeholder">{{ app.display_name[0]|upper }}</div>
+    {% endif %}
+    <div>
+        <h1>{{ app.display_name }}</h1>
+        <p class="muted">{{ app.package_name }}</p>
+        <div class="badges">
+            <span class="badge">{{ app.category }}</span>
+            {% if latest %}
+            <span class="badge badge-outline">Aktuell: v{{ latest.version_name }} ({{ latest.version_code }})</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if app.description %}
+<div class="card">
+    <h2>Beschreibung</h2>
+    <p>{{ app.description }}</p>
+</div>
+{% endif %}
+
+{% if latest %}
+<div class="card">
+    <h2>Download</h2>
+    <p>Version {{ latest.version_name }} ({{ latest.version_code }}) &middot; {{ "%.1f"|format(latest.apk_size_bytes / 1048576) }} MB</p>
+    <p class="muted small">Min SDK: {{ latest.min_sdk or "-" }} &middot; Target SDK: {{ latest.target_sdk or "-" }}</p>
+    <p class="muted small">{{ latest.download_count }} Downloads &middot; {{ latest.install_count }} Installationen</p>
+    <a class="btn btn-primary" href="/data/apks/{{ latest.apk_filename }}">APK herunterladen</a>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>Versionsverlauf</h2>
+    <table class="version-table">
+        <thead>
+            <tr>
+                <th>Version</th>
+                <th>Größe</th>
+                <th>Hochgeladen</th>
+                <th>Changelog</th>
+                <th>Downloads</th>
+                <th>Installationen</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for version in app.versions %}
+            <tr>
+                <td>{{ version.version_name }} ({{ version.version_code }})</td>
+                <td>{{ "%.1f"|format(version.apk_size_bytes / 1048576) }} MB</td>
+                <td>{{ version.uploaded_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                <td>{{ version.changelog or "-" }}</td>
+                <td>{{ version.download_count }}</td>
+                <td>{{ version.install_count }}</td>
+                <td>
+                    <a href="/data/apks/{{ version.apk_filename }}">Download</a>
+                    {% if app.versions|length > 1 %}
+                    <form method="post" action="/apps/{{ app.id }}/versions/{{ version.id }}/delete" class="inline-form" onsubmit="return confirm('Diese Version wirklich löschen?');">
+                        <button type="submit" class="btn-link btn-danger">Löschen</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<form method="post" action="/apps/{{ app.id }}/delete" onsubmit="return confirm('Die gesamte App inkl. aller Versionen wirklich löschen?');">
+    <button type="submit" class="btn btn-danger">App vollständig löschen</button>
+</form>
+{% endblock %}

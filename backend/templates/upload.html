@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}APK hochladen – techkev-Appstore{% endblock %}
+{% block content %}
+<h1>APK hochladen</h1>
+
+{% if error %}
+<div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
+<form method="post" action="/upload" enctype="multipart/form-data" class="card">
+    <label for="dropzone">APK-Datei</label>
+    <div class="dropzone" id="dropzone">
+        <p>APK-Datei hierher ziehen oder klicken zum Auswählen</p>
+        <p class="muted small" id="filename-display"></p>
+        <input type="file" id="file" name="file" accept=".apk" required>
+    </div>
+
+    <label for="category">Kategorie</label>
+    <input type="text" id="category" name="category" placeholder="z. B. Tools, Spiele, Produktivität" value="Sonstige">
+
+    <label for="description">Beschreibung</label>
+    <textarea id="description" name="description" rows="4" placeholder="Kurze Beschreibung der App"></textarea>
+
+    <label for="changelog">Changelog dieser Version</label>
+    <textarea id="changelog" name="changelog" rows="4" placeholder="Was ist neu in dieser Version?"></textarea>
+
+    <button type="submit" class="btn btn-primary">Hochladen</button>
+</form>
+
+<script src="/static/js/main.js"></script>
+{% endblock %}
